@@ -2,14 +2,15 @@ const express = require("express");
 const router = express.Router();
 //validation. adds another parameter to router commands
 const { check, validationResult } = require("express-validator");
-
 const gravatar = require("gravatar");
-
 const bcrypt = require("bcryptjs");
+//jwt web token
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
-// // @route   GET api/users
-// // @desc    Test route
-// // @access  Public
+// @route   GET api/users
+// @desc    Test route
+// @access  Public
 // router.get('/', (req, res) => res.send('User Route'));
 
 // Get model for mongoose queries
@@ -72,14 +73,28 @@ router.post(
       await user.save();
 
       // Return the jsonwebtoken - user logs in when it is created. need token
-      res.send("User registered");
+      const payload = {
+        user: {
+          // actually _id in mongoDB but mongoose abstacts this
+          id: user.id,
+        },
+      };
+
+      // jwt secret in config
+      // expires to less time in deployment
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       console.log(err.message);
       return res.status(500).send("Server Error");
     }
-
-    console.log(req.body);
-    res.send("User Route");
   }
 );
 
