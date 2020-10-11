@@ -20,3 +20,4 @@ Other dependencies:
 
 Dev Dependencies:
 - nodemon (for fast development)
+- concurrently
