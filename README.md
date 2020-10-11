@@ -15,3 +15,8 @@ Mongoose
 - model mongodb database in ExpressJS
 - basically ORM for documents - aka ODM (like Active Record for Rails)
 
+Other dependencies:
+- express express-validator bcryptjs config gravatar jsonwebtoken mongoose request  
+
+Dev Dependencies:
+- nodemon (for fast development)
